@@ -54,7 +54,9 @@
 
 ## Set up github
 - Change remote path
+	```{sh}
 	.git/config
+	```
 
 - Add files to ignore to gitignore
 	.gitignore
