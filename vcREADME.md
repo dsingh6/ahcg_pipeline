@@ -53,4 +53,19 @@
 	```
 
 ## Set up github
-
+- Change remote path
+	```{sh}
+	.git/config
+	```
+- Add files to ignore to gitignore
+	```{sh}
+	.gitignore
+	```
+- Add file to git repository 
+	```{sh}
+	git add vcREADME.txt
+	git commit -m "ReadMe file describing the pipeline"
+	git config --global user.email dsingh6@gatech.edu
+ 	git commit -m "ReadMe file describing the pipeline"
+ 	git push origin master
+	```
