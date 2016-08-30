@@ -59,11 +59,14 @@
 	```
 
 - Add files to ignore to gitignore
+	```{sh}
 	.gitignore
+	```
 
-- Add file to git repository 
-	git add vcREADME.txt
-	git commit -m "ReadMe file describing the pipeline"
+- Add file to git repository
+	```{sh}
+	git add <filename>
 	git config --global user.email dsingh6@gatech.edu
- 	git commit -m "ReadMe file describing the pipeline"
+ 	git commit -m <"commit message">
  	git push origin master
+	```
