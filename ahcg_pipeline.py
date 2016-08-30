@@ -5,12 +5,15 @@ import glob
 import logging
 import argparse
 import subprocess
+import time
+
+start_time = time.time()
 
 def main(trim_path, bowtie_path, picard_path, gatk_path,
         input_path, index_path, dbsnp_path, adapter_path,
         ref_path, out_path):
 
-    #Get complete path
+    #Get complete paths from input arguments
     trim_path = os.path.abspath(trim_path)
     bowtie_path = os.path.abspath(bowtie_path)
     picard_path = os.path.abspath(picard_path)
@@ -21,7 +24,9 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     ref_path = os.path.abspath(ref_path)
     out_path = os.path.abspath(out_path)
     adpater_path = os.path.abspath(adapter_path)
-    #Check if paths exist
+    
+
+    #Check if paths exist or exit program
     if not os.path.exists(trim_path):
         raise FileNotFoundError('Trimmomatic not found at {0}'.format(trim_path))
     
@@ -56,9 +61,11 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     #Creat output directory
     if not os.path.exists(out_path):
         os.mkdir(out_path)
+	print 'Making output directory'
 
 
     #Trim fastq files
+    print 'Trimming read files'
     read1 = input_path[0]
     read2 = input_path[1]
     tread1 = '{1}_trimmed.fq'.format(out_path, os.path.splitext(read1)[0])
@@ -76,9 +83,12 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if trun.returncode != 0:
         print('Fastq trimming failed; Exiting program')
         sys.exit()
+    else:
+	print ('Trimming complete.')
          
 
     #Align the reads using bowtie
+    print 'Aligning reads using bowtie'
     sam_path = '{1}.sam'.format(out_path, os.path.splitext(tread1)[0])
     bcmd = [ bowtie_path, '-x', index_path, '-S', sam_path, '-p', '1' , '-1',
             tread1, '-2', tread2]
@@ -89,8 +99,11 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if brun.returncode != 0:
         print('Bowtie failed; Exiting program')
         sys.exit()
+    else:
+	print 'Alignment complete.'
 
     #Add read group information
+    print 'Adding Picard read groups'
     add_path = '{0}/{1}_RG.bam'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
     acmd = ['java', '-Xmx1g', '-jar', picard_path, 'AddOrReplaceReadGroups',
         'I='+sam_path , 'O='+add_path, 'SORT_ORDER=coordinate', 'RGID=Test', 
@@ -104,8 +117,11 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if arun.returncode != 0:
         print('Picard add read groups failed; Exiting program')
         sys.exit()
+    else:
+        print 'Read group addition complete.'
 
     #Mark PCR duplicates
+    print 'Marking PCR duplicates'
     dup_path = '{0}/{1}_MD.bam'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
     met_path = '{0}/{1}_MD.metrics'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
     mdcmd = ['java', '-Xmx1g', '-jar', picard_path, 'MarkDuplicates', 'I='+add_path, 
@@ -117,8 +133,11 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if mdrun.returncode != 0:
         print('Picard mark duplicate failed; Exiting program')
         sys.exit()
+    else:
+	print 'Duplicate marking complete'
 
     #Fix mate information
+    print 'Working on read fix mate information'
     fix_path = '{0}/{1}_FM.bam'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
     fcmd = ['java', '-Xmx1g', '-jar', picard_path, 'FixMateInformation',
         'I='+dup_path, 'O='+fix_path, 'ASSUME_SORTED=true', 'ADD_MATE_CIGAR=true',
@@ -130,8 +149,11 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if frun.returncode != 0:
         print('Picard fix mate information failed; Exiting program')
         sys.exit()
+    else:
+	print 'Fix mate information complete.'
    
     #Run realigner target creator
+    print 'Running realigner target creator'
     interval_path = '{0}/{1}.intervals'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0]) 
     
     trcmd = ['java', '-jar', gatk_path, '-T', 'RealignerTargetCreator', '-o',
@@ -144,9 +166,12 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if trrun.returncode != 0:
         print('Realigner Target creator failed; Exiting program')
         sys.exit()
+    else:
+	print 'Realigner target creator complete.'
      
 
     #Run indel realigner
+    print 'Running indel realigner creator'
     ral_path = '{0}/{1}_IR.bam'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
     
     recmd = ['java', '-jar', gatk_path, '-T', 'IndelRealigner',
@@ -159,8 +184,11 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if rerun.returncode != 0:
         print('Indel realigner creator failed; Exiting program')
         sys.exit()
+    else:
+	print 'Indel realigner creator complete.'
 
     #Base quality score recalibration
+    print 'Recalibrating base quality score'
     bqs_path = '{0}/{1}.table'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
      
     bqscmd = ['java', '-jar', gatk_path, '-T', 'BaseRecalibrator', '-R', ref_path,
@@ -173,8 +201,11 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if bqsrun.returncode != 0:
         print('Base quality score recalibrator failed; Exiting program')
         sys.exit()
+    else:
+	print 'Base quality score recalibration complete.'
     
     #Print Reads
+    print 'Printing reads'
     fbam_path = '{0}/{1}_final.bam'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
     prcmd = ['java', '-jar', gatk_path, '-T', 'PrintReads', '-R', ref_path, '-I',
             ral_path, '-o', fbam_path, '-BQSR', bqs_path, '-nct', '1']
@@ -186,9 +217,12 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if prrun.returncode != 0:
         print('Print reads failed; Exiting program')
         sys.exit()
+    else:
+	print 'Printing reads complete.'
 
 
     #Haplotype caller
+    print 'Running haplotype caller'
     vcf_path = '{0}/variants.vcf'.format(out_path, os.path.splitext(os.path.basename(sam_path))[0])
 
     hcmd = ['java', '-jar', gatk_path, '-T', 'HaplotypeCaller', '-R', ref_path,
@@ -201,6 +235,8 @@ def main(trim_path, bowtie_path, picard_path, gatk_path,
     if hrun.returncode != 0:
         print('Haplotype caller failed; Exiting program')
         sys.exit()
+    else:
+	print 'Haplotype caller complete.'
 
 
     print('Variant call pipeline completed')
@@ -225,3 +261,6 @@ if __name__ == '__main__':
 main(args.trim_path, args.bowtie_path, args.picard_path, args.gatk_path,
     args.input_path, args.index_path, args.dbsnp_path, args.adapter_path,
     args.ref_path, args.out_path)
+
+runtime = time.time() - start_time
+print "Pipeline runtime: %s" % runtime
