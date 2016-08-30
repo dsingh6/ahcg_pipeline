@@ -1,20 +1,22 @@
-Variant calling pipeline
+## Variant calling pipeline
 
-Virtualbox setup:
+## Virtualbox setup
 - Login information:
 	username: vagrant
 	password: vagrant
 
-SSH onto virtual machine (putty)
+## SSH onto virtual machine (putty)
 - Login information:
 	Hostname: vagrant@localhost port: 2222
 	password: vagrant
 
-Set up pipeline dependencies
+## Set up pipeline dependencies
 - download reference genome and snp db
+	```{sh}
 	wget www.prism.gatech.edu/~sravishankar9/resources.tar.gz
 	tar -zxvf ./resources.tar.gz
 	gunzip ./resources/dbsnp/dbsnp_138.hg19.vcf.gz
+	```
 	
 - Build bowtie index in working directory
 	./lib/bowtie2-2.2.9/bowtie2-build ./resources/genome/hg19.fa hg19
