@@ -104,3 +104,37 @@ python3 ahcg_pipeline.py -h
  	git commit -m <"commit message">
  	git push origin master
 	```
+
+## Extract sequences for the gene of interest: BRCA1
+- download gene coordinates file for hg19
+	```{sh}
+	wget http://vannberg.biology.gatech.edu/data/ahcg2016/reference_genome/hg19_refGene.txt
+	```
+
+- download bedtools
+	```{sh}
+	$ wget https://github.com/arq5x/bedtools2/releases/download/v2.25.0/bedtools-2.25.0.tar.gz
+	$ tar -zxvf bedtools-2.25.0.tar.gz
+	$ cd bedtools2
+	$ make
+	```
+
+- Find BRCA1 gene in gene coordinate file
+	```{sh}
+	grep BRCA1 hg19_refGene.txt
+	```
+
+- Select BRCA1 variant
+	NM_007294
+	https://dnasu.org/DNASU/AdvancedSearchOptions.do
+	
+- Write script to create bed file from extracted variant
+	```{sh}
+	python pullCoordinates.py hg19_refGene.txt allExomes.bed
+	grep NM_007294 allExomes.bed > exomes007294.bed
+	```
+	
+- extract sequences from original reference and bed file
+	```{sh}
+	bedtools getfasta -s -fi ./resources/genome/hg19.fa -bed exomes007294.bed -fo nm_007294.out
+	```
