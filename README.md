@@ -89,12 +89,14 @@ python3 ahcg_pipeline.py -h
 ## Set up github
 - Change remote path
 	```{sh}
-	.git/config
+	vim .git/config
+	url = https://github.com/dsingh6/Applied-Computational-Genomics
 	```
 
 - Add files to ignore to gitignore
 	```{sh}
-	.gitignore
+	vim .gitignore
+	add directories to be ignored
 	```
 
 - Add file to git repository
@@ -128,7 +130,7 @@ python3 ahcg_pipeline.py -h
 	```{sh}
 	NM_007294
 	https://dnasu.org/DNASU/AdvancedSearchOptions.do
-	```{sh}
+	```
 	
 - Write script to create bed file from extracted variant
 	```{sh}
