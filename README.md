@@ -125,8 +125,10 @@ python3 ahcg_pipeline.py -h
 	```
 
 - Select BRCA1 variant
+	```{sh}
 	NM_007294
 	https://dnasu.org/DNASU/AdvancedSearchOptions.do
+	```{sh}
 	
 - Write script to create bed file from extracted variant
 	```{sh}
