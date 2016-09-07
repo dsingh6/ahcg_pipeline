@@ -142,3 +142,19 @@ python3 ahcg_pipeline.py -h
 	```{sh}
 	bedtools getfasta -s -fi ./resources/genome/hg19.fa -bed exomes007294.bed -fo nm_007294.out
 	```
+
+## Set up to call variants on NIST's NA12878
+- Find the .bam file for NIST NA12878 genome
+	```{sh}
+	ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/latest/
+	```
+
+- extract region of interest from whole bam file (whole bam -> extracted bam) using BED file
+	```{sh}
+	samtools view <BAM in> -L <input.bed> -b -o <output BAM>
+	```
+	
+- Convert BAM file to FASTQ file for region of interest
+	```{sh}
+	bedtools bamtofastq [OPTIONS] -i <BAM> -fq <FASTQ> -fq1 <READ2>
+	```
