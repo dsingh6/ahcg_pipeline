@@ -1,5 +1,10 @@
 # Variant calling pipeline
 
+## Install Virtualbox and Basespace server
+- https://www.virtualbox.org/wiki/Downloads
+- https://da1s119xsxmu0.cloudfront.net/sites/developer/native/nativeappsvm/BaseSpace%20Native%20App%20VM%20(phix%20only)%20v9.ova
+- https://developer.basespace.illumina.com/docs/content/documentation/native-apps/setup-dev-environment
+
 ## Virtualbox setup
 - Login information:
 	username: vagrant
