@@ -95,7 +95,7 @@ python3 ahcg_pipeline.py -h
 - Change remote path
 	```{sh}
 	vim .git/config
-	url = https://github.com/dsingh6/Applied-Computational-Genomics
+	url = https://github.com/dsingh6/ahcg_pipeline
 	```
 
 - Add files to ignore to gitignore
