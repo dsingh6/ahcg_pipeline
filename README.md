@@ -87,9 +87,9 @@ python3 ahcg_pipeline.py -h
 	output = ./output/
 
 ## Run pipeline
-	```{sh}
-	python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/bowtie2-2.2.9/bowtie2 -p ./lib/picard.jar -g ./lib/GenomeAnalysisTK.jar -i NIST7035_TAAGGCGA_L001_R1_001.fastq NIST7035_TAAGGCGA_L001_R2_001.fastq -w hg19 -d ./resources/dbsnp/dbsnp_138.hg19.vcf -r ./resources/genome/hg19.fa -a ./lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa -o ./output/
-	```
+```{sh}
+python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/bowtie2-2.2.9/bowtie2 -p ./lib/picard.jar -g ./lib/GenomeAnalysisTK.jar -i NIST7035_TAAGGCGA_L001_R1_001.fastq NIST7035_TAAGGCGA_L001_R2_001.fastq -w hg19 -d ./resources/dbsnp/dbsnp_138.hg19.vcf -r ./resources/genome/hg19.fa -a ./lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa -o ./output/
+```
 
 ## Set up github
 - Change remote path
@@ -170,4 +170,11 @@ python3 ahcg_pipeline.py -h
 - Convert BAM file to FASTQ file for region of interest
 	```{sh}
 	bedtools bamtofastq [OPTIONS] -i <BAM> -fq <FASTQ> -fq1 <READ2>
+	```
+## Download gold standard vcf files for NA12878
+	```{sh}
+	illumina
+	ftp://ussd-ftp.illumina.com/2016-1.0/hg19/small_variants/NA12878/NA12878.vcf.gz
+	Genome in a Bottle
+	wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST.hc.snps.indels.vcf
 	```
