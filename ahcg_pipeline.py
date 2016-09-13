@@ -263,4 +263,4 @@ main(args.trim_path, args.bowtie_path, args.picard_path, args.gatk_path,
     args.ref_path, args.out_path)
 
 runtime = time.time() - start_time
-print "Pipeline runtime: %s" % runtime
+print "Pipeline runtime: %s seconds" % runtime
