@@ -7,13 +7,13 @@
 
 ## Virtualbox setup
 - Login information:
-	username: vagrant
-	password: vagrant
+username: vagrant
+password: vagrant
 
 ## SSH onto virtual machine (putty)
 - Login information:
-	Hostname: vagrant@localhost port: 2222
-	password: vagrant
+Hostname: vagrant@localhost port: 2222
+password: vagrant
 
 ## Program Requirements
 
@@ -173,8 +173,23 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 	```
 ## Download gold standard vcf files for NA12878
 	```{sh}
+	Genome in a Bottle Lastest Release
+	wget ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/latest/NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf.gz
 	illumina
 	ftp://ussd-ftp.illumina.com/2016-1.0/hg19/small_variants/NA12878/NA12878.vcf.gz
 	Genome in a Bottle
 	wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST.hc.snps.indels.vcf
+	```
+## Find the variants in the generated file 
+	```{sh}
+	tabix method (finds ALL variants in region):
+	bgzip <file.vcf>
+	tabix -p vcf <file.vcf>
+	tabix <file.vcf.gz> chr17:41195311-41278500
+	Script method (finds variants only in the exome region):
+	extractVariants.py <infile> > <outfile>
+	```
+## Find the variants in the correct locations (exome) of the whole genome vcf file
+	```{sh}
+	extractVariants.py <infile> > <outfile>
 	```
