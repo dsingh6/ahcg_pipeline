@@ -7,13 +7,17 @@
 
 ## Virtualbox setup
 - Login information:
-username: vagrant
-password: vagrant
+	```{sh}
+	username: vagrant
+	password: vagrant
+	```	
 
 ## SSH onto virtual machine (putty)
 - Login information:
-Hostname: vagrant@localhost port: 2222
-password: vagrant
+	```{sh}
+	Hostname: vagrant@localhost port: 2222
+	password: vagrant
+	```	
 
 ## Program Requirements
 
