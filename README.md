@@ -6,18 +6,18 @@
 - https://developer.basespace.illumina.com/docs/content/documentation/native-apps/setup-dev-environment
 
 ## Virtualbox setup
-- Login information:
-	```{sh}
-	username: vagrant
-	password: vagrant
-	```	
+Login information:
+```{sh}
+username: vagrant
+password: vagrant
+```	
 
 ## SSH onto virtual machine (putty)
-- Login information:
-	```{sh}
-	Hostname: vagrant@localhost port: 2222
-	password: vagrant
-	```	
+Login information:
+```{sh}
+Hostname: vagrant@localhost port: 2222
+password: vagrant
+```	
 
 ## Program Requirements
 
