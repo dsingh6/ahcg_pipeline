@@ -197,3 +197,42 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 	```{sh}
 	extractVariants.py <infile> > <outfile>
 	```
+## Expanding Pipeline for All Cancer Genes
+- Sources for Cancer Gene list
+	```{sh}
+	http://www.otogenetics.com/forms/Breast_Cancer_gene_list.pdf (Otogenetics)
+	https://s3.amazonaws.com/color-static-prod/pdfs/validationWhitePaper.pdf (Color genomics white paper)
+	```
+
+- Breast Cancer Common Gene List
+	```{sh}
+	Gene	NM_number	OMIM	Source
+	AR	NM_000044.3	313700	OTO
+	ATM	NM_000051.3	607585	both	
+	BARD1	NM_000465.3	601593	both
+	BRCA1	NM_007294	113705	both
+	BRCA2	NM_000059.3	600185	both
+	BRIP1	NM_032043.2	605882	both
+	CASP8	NM_001080124.1	601763	both
+	CDH1	NM_004360.3	192090	both
+	CHEK2	NM_001005735.1	604373	both
+	DIRAS3	NM_004675.2	605193	OTO
+	ERBB2	NM_001005862.1	164870	OTO
+	EPCAM	NM_002354.2		CG
+	MLH1	NM_000249		CG
+	MSH2	NM_000251		CG
+	MSH6	NM_000179		CG
+	NBN	NM_002485.4	602667	both
+	PALB2	NM_024675.3	601355	both
+	PMS2	NM_000535	CG
+	PTEN	NM_000314.4	601728	both
+	RAD50	NM_005732.3	604040	OTO
+	RAD51	NM_001164269.1	179617	OTO
+	RAD51C	NM_058216.1		CG
+	RAD51D	NM_001142571.1		CG
+	STK11	NM_000455.4	602216	both
+	TGFB1	NM_000660.4	190180	OTO
+	TP53	NM_000546.5	191170	both		
+	```
+
+
