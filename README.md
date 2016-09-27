@@ -246,7 +246,7 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 	./extractVariants.py cancerGenes.bed variants_v1.vcf calledVariants.txt
 	```
 - Find cooresponding variants from gold standard variant calls
-	```{sh}
+	```{sh}	
 	./extractVariants.py cancerGenes.bed NA12878_GIAB.vcf goldVariants.txt
-        ```
+	```
 
