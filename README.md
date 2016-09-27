@@ -204,35 +204,49 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 	https://s3.amazonaws.com/color-static-prod/pdfs/validationWhitePaper.pdf (Color genomics white paper)
 	```
 
-- Breast Cancer Common Gene List
+- Breast and Ovarian Cancer Common Gene List
 	```{sh}
-	Gene	NM_number	OMIM	Source
-	AR	NM_000044.3	313700	OTO
-	ATM	NM_000051.3	607585	both	
-	BARD1	NM_000465.3	601593	both
-	BRCA1	NM_007294	113705	both
-	BRCA2	NM_000059.3	600185	both
-	BRIP1	NM_032043.2	605882	both
-	CASP8	NM_001080124.1	601763	both
-	CDH1	NM_004360.3	192090	both
-	CHEK2	NM_001005735.1	604373	both
-	DIRAS3	NM_004675.2	605193	OTO
-	ERBB2	NM_001005862.1	164870	OTO
-	EPCAM	NM_002354.2		CG
-	MLH1	NM_000249		CG
-	MSH2	NM_000251		CG
-	MSH6	NM_000179		CG
-	NBN	NM_002485.4	602667	both
-	PALB2	NM_024675.3	601355	both
-	PMS2	NM_000535	CG
-	PTEN	NM_000314.4	601728	both
-	RAD50	NM_005732.3	604040	OTO
-	RAD51	NM_001164269.1	179617	OTO
-	RAD51C	NM_058216.1		CG
-	RAD51D	NM_001142571.1		CG
-	STK11	NM_000455.4	602216	both
-	TGFB1	NM_000660.4	190180	OTO
-	TP53	NM_000546.5	191170	both		
+	Gene	NM_number
+	BRIP1   NM_032043
+	BRCA1   NM_007294
+	BRCA2   NM_000059
+	DIRAS3  NM_004675
+	ERBB2   NM_001005862
+	CASP8   NM_001080124
+	TGFB1   NM_000660
+	MLH1    NM_000249
+	MSH2    NM_000251
+	MSH6    NM_000179
+	PMS2    NM_000535
+	EPCAM   NM_002354
+	TP53    NM_000546
+	PTEN    NM_000314
+	STK11   NM_000455
+	CDH1    NM_004360
+	PALB2   NM_024675
+	CHEK2   NM_001005735
+	AR  NM_000044
+	ATM NM_000051
+	NBN NM_002485
+	BARD1   NM_000465
+	BRIP1   NM_032043
+	RAD50   NM_005732
+	RAD51A  NM_001164269
+	RAD51C  NM_058216
+	RAD51D  NM_002878		
 	```
 
+- Create new BED file including all exome coordinates from the Gene list
+	```{sh}
+	./makeBED.py hg19_refGene.txt > cancerGenes.bed 
+	```
+
+- Find variants from new coordinates
+	```{sh}
+	./extractVariants.py cancerGenes.bed variants_v1.vcf calledVariants.txt
+	```
+- Find cooresponding variants from gold standard variant calls
+	```{sh}
+	./extractVariants.py cancerGenes.bed NA12878_GIAB.vcf goldVariants.txt
+        ```
 
