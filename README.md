@@ -172,8 +172,8 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 	```
 
 ## Download gold standard vcf files for NA12878
+- Genome in a Bottle Lastest Release
 	```{sh}
-	Genome in a Bottle Lastest Release
 	wget ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/latest/NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf.gz
 	```
 
@@ -235,12 +235,14 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 
 - Change the gold standard variants file to include 'chr' in chromosome column
 	```{sh}
-	awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf > GIAB_goldStandard.vcf
+	awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' NA12878_GIAB.vcf > GIAB_goldStandard.vcf
 	```
+
 - Find cooresponding variants from gold standard variant calls
 	```{sh}	
 	bedtools intersect -header -wa -a GIAB_goldStandard.vcf -b cancerGenes.bed > goldCancerVariants.vcf 
 	```
+
 - Compare the two intersect VCF file to find the overlapping variants
 	```{sh}
 	bedtools intersect -header -a foundVariants.vcf -b goldCancerVariants.vcf > overlappingVariants.vcf 
