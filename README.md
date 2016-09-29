@@ -164,39 +164,17 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 - merge BAM files
 	```{sh}
 	samtools merge <merged.bam> <in.1.bam in.2.bam ...>
-	```
-
-- extract region of interest from whole bam file (whole bam -> extracted bam) using BED file
-	```{sh}
-	samtools view <BAM in> -L <input.bed> -b -o <output BAM>
-	```
-	
+	```	
 - Convert BAM file to FASTQ file for region of interest
 	```{sh}
-	bedtools bamtofastq [OPTIONS] -i <BAM> -fq <FASTQ> -fq1 <READ2>
+	bedtools bamtofastq [OPTIONS] -i <merged.bam> -fq <FASTQ> -fq1 <READ2>
 	```
 ## Download gold standard vcf files for NA12878
 	```{sh}
 	Genome in a Bottle Lastest Release
 	wget ftp://ftp-trace.ncbi.nlm.nih.gov/giab/ftp/release/NA12878_HG001/latest/NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf.gz
-	illumina
-	ftp://ussd-ftp.illumina.com/2016-1.0/hg19/small_variants/NA12878/NA12878.vcf.gz
-	Genome in a Bottle
-	wget ftp://ftp-trace.ncbi.nih.gov/giab/ftp/data/NA12878/Garvan_NA12878_HG001_HiSeq_Exome/project.NIST.hc.snps.indels.vcf
 	```
-## Find the variants in the generated file 
-	```{sh}
-	tabix method (finds ALL variants in region):
-	bgzip <file.vcf>
-	tabix -p vcf <file.vcf>
-	tabix <file.vcf.gz> chr17:41195311-41278500
-	Script method (finds variants only in the exome region):
-	extractVariants.py <infile> > <outfile>
-	```
-## Find the variants in the correct locations (exome) of the whole genome vcf file
-	```{sh}
-	extractVariants.py <infile> > <outfile>
-	```
+
 ## Expanding Pipeline for All Cancer Genes
 - Sources for Cancer Gene list
 	```{sh}
@@ -233,20 +211,33 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 	RAD50   NM_005732
 	RAD51A  NM_001164269
 	RAD51C  NM_058216
-	RAD51D  NM_002878		
+	RAD51D  NM_002878
+	*** saved in file: breastCancerGenes.txt		
 	```
 
+- Extract regions of interest (gene list) from the reference file
+	```{sh}
+	awk '{print "\\<" $2 "\\>" }' breastCancerGenes.txt > NMnumbersBCG.txt
+	grep -f NMnumbersBCG.txt hg19_refGene.txt > BCG_hg19_extracts.txt
+	```
 - Create new BED file including all exome coordinates from the Gene list
 	```{sh}
-	./makeBED.py hg19_refGene.txt > cancerGenes.bed 
+	./BEDmaker -i BCG_hg19_extracts.txt -o cancerGenes.bed
 	```
-
-- Find variants from new coordinates
+- Find variants from new coordinates using the bed file and all variants file
 	```{sh}
-	./extractVariants.py cancerGenes.bed variants_v1.vcf calledVariants.txt
+	bedtools intersect -header -wa -a variants.vcf -b cancerGenes.bed > foundVariants.vcf
+	```
+- Change the gold standard variants file to include 'chr' in chromosome column
+	```{sh}
+	awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf > GIAB_goldStandard.vcf
 	```
 - Find cooresponding variants from gold standard variant calls
 	```{sh}	
-	./extractVariants.py cancerGenes.bed NA12878_GIAB.vcf goldVariants.txt
+	bedtools intersect -header -wa -a GIAB_goldStandard.vcf -b cancerGenes.bed > goldCancerVariants.vcf 
+	```
+- Compare the two intersect VCF file to find the overlapping variants
+	```{sh}
+	bedtools intersect -header -a foundVariants.vcf -b goldCancerVariants.vcf > overlappingVariants.vcf 
 	```
 
