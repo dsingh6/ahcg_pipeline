@@ -164,11 +164,13 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 - merge BAM files
 	```{sh}
 	samtools merge <merged.bam> <in.1.bam in.2.bam ...>
-	```	
+	```
+	
 - Convert BAM file to FASTQ file for region of interest
 	```{sh}
 	bedtools bamtofastq [OPTIONS] -i <merged.bam> -fq <FASTQ> -fq1 <READ2>
 	```
+
 ## Download gold standard vcf files for NA12878
 	```{sh}
 	Genome in a Bottle Lastest Release
@@ -220,14 +222,17 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 	awk '{print "\\<" $2 "\\>" }' breastCancerGenes.txt > NMnumbersBCG.txt
 	grep -f NMnumbersBCG.txt hg19_refGene.txt > BCG_hg19_extracts.txt
 	```
+
 - Create new BED file including all exome coordinates from the Gene list
 	```{sh}
 	./BEDmaker -i BCG_hg19_extracts.txt -o cancerGenes.bed
 	```
+
 - Find variants from new coordinates using the bed file and all variants file
 	```{sh}
 	bedtools intersect -header -wa -a variants.vcf -b cancerGenes.bed > foundVariants.vcf
 	```
+
 - Change the gold standard variants file to include 'chr' in chromosome column
 	```{sh}
 	awk '{if($0 !~ /^#/) print "chr"$0; else print $0}' NA12878_GIAB_highconf_CG-IllFB-IllGATKHC-Ion-Solid-10X_CHROM1-X_v3.3_highconf.vcf > GIAB_goldStandard.vcf
