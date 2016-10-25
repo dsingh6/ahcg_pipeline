@@ -274,34 +274,39 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 
 ## Run read depth coverage calculator
 - Extract BRCA1 gene chromosome coordinates from "BRC_OC_gene_list_BED.txt"
-	```{sh}
-	grep 'NM_007298' cancerGenes.txt > brca1.bed
-	```
+```{sh}
+grep 'NM_007298' cancerGenes.txt > brca1.bed
+```
+
 - Get brca1 alignments
-	```{sh}
-	samtools view -L brca1.bed project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwa.markDuplicates.bam -b > na12878.brca1.bam
-	```
+```{sh}
+samtools view -L brca1.bed project.NIST_NIST7035_H7AP8ADXX_TAAGGCGA_1_NA12878.bwa.markDuplicates.bam -b > na12878.brca1.bam
+```
+
 - Computes coverage for cancer genes
-	```{sh}
-	bedtools genomecov -ibam na12878.brca1.bam -bga > na12878.brca1.bga.bed
-	```
+```{sh}
+bedtools genomecov -ibam na12878.brca1.bam -bga > na12878.brca1.bga.bed
+```
+
 - Extract BRCA1 coverage
-	```{sh}
-	bedtools intersect -split -a na12878.brca1.bga.bed -b brca1.bed -bed > brca1.final.bed
-	```
+```{sh}
+bedtools intersect -split -a na12878.brca1.bga.bed -b brca1.bed -bed > brca1.final.bed
+```
+
 - Calculate the read depth
-	```{sh}
-	./coverageCalulator.py
-	```
+```{sh}
+./coverageCalulator.py
+```
 
 ## Create clinical report
 - Download the BRCA variant clinical data
-	```{sh}
-	wget http://vannberg.biology.gatech.edu/data/ahcg2016/BRCA/BRCA1_brca_exchange_variants.csv
-	wget http://vannberg.biology.gatech.edu/data/ahcg2016/BRCA/BRCA2_brca_exchange_variants.csv
-	```
+```{sh}
+wget http://vannberg.biology.gatech.edu/data/ahcg2016/BRCA/BRCA1_brca_exchange_variants.csv
+wget http://vannberg.biology.gatech.edu/data/ahcg2016/BRCA/BRCA2_brca_exchange_variants.csv
+```
+
 - Extract the results
-	```{sh}
-	./compare_clin_with_vcf.py NA12878_variants.filtered.vcf BRCA1_brca_exchange_variants.csv BRCA2_brca_exchange_variants.csv
-	```
+```{sh}
+./compare_clin_with_vcf.py NA12878_variants.filtered.vcf BRCA1_brca_exchange_variants.csv BRCA2_brca_exchange_variants.csv
+```
 
