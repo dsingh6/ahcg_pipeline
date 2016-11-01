@@ -272,6 +272,13 @@ python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/
 	 java -jar /home/vagrant/ahcg_pipeline/lib/GenomeAnalysisTK.jar -T ApplyRecalibration -R /home/vagrant/ahcg_pipeline/resources/genome/hg19.fa -input /home/vagrant/ahcg_pipeline/working/variants.vcf --ts_filter_level 99.0 -tranchesFile output.tranches -recalFile output.recal -mode SNP  -o ./NA12878_variants.filtered.vcf
 	```
 
+## Collect Clinical Data for BRCA1 and BRCA2 using vcf 
+```{sh}
+python compare_clin_with_vcf.py ./NA12878_variants.vcf BRCA1_brca_exchange_variants.csv BRCA2_brca_exchange_variants.csv > brca_clinical_xref.txt
+
+cat brca_clinical_xref.txt | awk 'BEGIN {FS="\t"} {split($1, coord, ":"); printf("%s\t%s\t%s\t%s\n", coord[1], coord[2], coord[2], $2)}' | sed -E -e 's/^([^c].*)/chr\1/' > brca_clinical_xref.bed
+```
+
 ## Run read depth coverage calculator
 - Extract BRCA1 gene chromosome coordinates from "BRC_OC_gene_list_BED.txt"
 ```{sh}
@@ -295,18 +302,9 @@ bedtools intersect -split -a na12878.brca1.bga.bed -b brca1.bed -bed > brca1.fin
 
 - Calculate the read depth
 ```{sh}
-./coverageCalulator.py
-```
+awk '{printf("%s\t%s\t%s\t%s\t%s\t%s\n",$1,$2,$3,$4,$10,$6)}' brca1.final.bed > brca1.coverage_final.bed
 
-## Create clinical report
-- Download the BRCA variant clinical data
-```{sh}
-wget http://vannberg.biology.gatech.edu/data/ahcg2016/BRCA/BRCA1_brca_exchange_variants.csv
-wget http://vannberg.biology.gatech.edu/data/ahcg2016/BRCA/BRCA2_brca_exchange_variants.csv
-```
+bedtools intersect -a brca1.final.bed -b brca_clinical_xref.bed -wo > brca1_clinical_final.bed
 
-- Extract the results
-```{sh}
-./compare_clin_with_vcf.py NA12878_variants.filtered.vcf BRCA1_brca_exchange_variants.csv BRCA2_brca_exchange_variants.csv
+cat brca_clinical_nonbenign_final.bed | cut -f4,5,7,8,10
 ```
-
