@@ -308,3 +308,31 @@ bedtools intersect -a brca1.final.bed -b brca_clinical_xref.bed -wo > brca1_clin
 
 cat brca_clinical_nonbenign_final.bed | cut -f4,5,7,8,10
 ```
+
+## Analyzing dilated cardiomyopathy patients
+- List of clinically relevant genes:
+```{sh}
+LMNA	NM_170707
+MYBPC3	NM_000256
+MYH7	NM_000257
+MYH6	NM_002471
+SCN5A	NM_198056
+TNNT2	NM_001001430
+```
+
+- Extract genes using hg_19 reference and NM Numbers
+```{sh}
+awk '{print "\\<" $2 "\\>" }' DCMgeneList.txt > nmNumbersDCM.txt
+grep -f nmNumbersDCM.txt hg19_refGene.txt > DCM_hg19_extracts.txt
+```
+
+- Create bed file for DCM genes
+```{sh}
+./BEDmaker.py -i DCM_hg19_extracts.txt -o DCM_genes.bed
+```
+
+
+
+
+
+
