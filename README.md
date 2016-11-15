@@ -331,8 +331,33 @@ grep -f nmNumbersDCM.txt hg19_refGene.txt > DCM_hg19_extracts.txt
 ./BEDmaker.py -i DCM_hg19_extracts.txt -o DCM_genes.bed
 ```
 
+- Download the BAM files for the DCM Patients
+```{sh}
+wget http://vannberg.biology.gatech.edu/data/DCM/MenCo001DNA/Control1_RG_MD_IR_BQ.bam
+wget http://vannberg.biology.gatech.edu/data/DCM/MenCo001DNA/Control1_RG_MD_IR_BQ.bai
+wget http://vannberg.biology.gatech.edu/data/DCM/MenCo002DNA/Control2_RG_MD_IR_BQ.bam
+wget http://vannberg.biology.gatech.edu/data/DCM/MenCo003DNA/Control2_RG_MD_IR_BQ.bai
+wget http://vannberg.biology.gatech.edu/data/DCM/MenPa001DNA/Patient6_RG_MD_IR_BQ.bam
+wget http://vannberg.biology.gatech.edu/data/DCM/MenPa001DNA/Patient1_RG_MD_IR_BQ.bai
+wget http://vannberg.biology.gatech.edu/data/DCM/MenPa002DNA/Patient2_RG_MD_IR_BQ.bam
+wget http://vannberg.biology.gatech.edu/data/DCM/MenPa002DNA/Patient2_RG_MD_IR_BQ.bai
+wget http://vannberg.biology.gatech.edu/data/DCM/MenPa003DNA/Patient3_RG_MD_IR_BQ.bam
+wget http://vannberg.biology.gatech.edu/data/DCM/MenPa003DNA/Patient3_RG_MD_IR_BQ.bai
+wget http://vannberg.biology.gatech.edu/data/DCM/MenPa004DNA/Patient4_RG_MD_IR_BQ.bam
+wget http://vannberg.biology.gatech.edu/data/DCM/MenPa004DNA/Patient4_RG_MD_IR_BQ.bai
+```
+- Merge BAM files
+```{sh}
+samtools merge <merged.bam> <in.1.bam in.2.bam ...>
+```
 
+- Generate FASTQ to run the variant calling pipeline
+```{sh}
+bedtools bamtofastq [OPTIONS] -i <merged.bam> -fq <FASTQ> -fq1 <READ2>
+```
 
-
-
+- Run pipeline to get variants
+```{sh}
+python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/bowtie2-2.2.9/bowtie2 -p ./lib/picard.jar -g ./lib/GenomeAnalysisTK.jar -i read1r.fastq read2.fastq -w hg19 -d ./resources/dbsnp/dbsnp_138.hg19.vcf -r ./resources/genome/hg19.fa -a ./lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa -o ./output/
+```
 
