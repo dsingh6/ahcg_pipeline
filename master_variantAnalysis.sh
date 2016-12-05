@@ -85,10 +85,10 @@ then
 fi
 
 echo "Creating FastQ files from BAM file"
-bedtools bamtofastq -i $bam -fq read1.fastq -fq1 read2.fastq
+bedtools bamtofastq -i $bam -fq read1.fastq -fq2 read2.fastq
 
 echo "Running ahcg_pipeline on generated FastQ files"
-python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/triimmomatic-0.36.jar -b ./lib/bowtie2-2.2.9/bowtie2 -p ./lib/picard.jar -g ./lib/GenomeAnalysisTK.jar -i read1.fastq read2.fastq -w hg19 -d ./resources/dbsnp/dbsnp_138.hg19.vcf -r ./resources/genome/hg19.fa -a ./lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa -o ./output_temp/
+python ahcg_pipeline.py -t ./lib/Trimmomatic-0.36/trimmomatic-0.36.jar -b ./lib/bowtie2-2.2.9/bowtie2 -p ./lib/picard.jar -g ./lib/GenomeAnalysisTK.jar -i read1.fastq read2.fastq -w hg19 -d ./resources/dbsnp/dbsnp_138.hg19.vcf -r ./resources/genome/hg19.fa -a ./lib/Trimmomatic-0.36/adapters/TruSeq2-PE.fa -o ./output_temp/
 
 echo "Recalibrating variants"
 java -Xmx4g -jar /home/vagrant/ahcg_pipeline/lib/GenomeAnalysisTK.jar -T VariantRecalibrator -R /home/vagrant/ahcg_pipeline/resources/genome/hg19.fa -input /home/vagrant/ahcg_pipeline/output_temp/variants.vcf -resource:hapmap,known=false,training=true,truth=true,prior=15.0 ./hapmap_3.3.hg19.sites.vcf.gz -resource:omni,known=false,training=true,truth=false,prior=12.0 ./1000G_omni2.5.hg19.sites.vcf.gz  -resource:1000G,known=false,training=true,truth=false,prior=10.0 ./1000G_phase1.snps.high_confidence.hg19.sites.vcf.gz -resource:dbsnp,known=true,training=false,truth=false,prior=2.0 /home/vagrant/ahcg_pipeline/resources/dbsnp/dbsnp_138.hg19.vcf.gz -an QD -an MQ -an MQRankSum -an ReadPosRankSum -an FS -an SOR -mode SNP -recalFile output.recal -tranchesFile output.tranches
