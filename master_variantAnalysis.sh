@@ -4,7 +4,7 @@ show_help()
 {
 cat <<EOF
 
-Usage: ./${0##*/} [-h] -r hg19_reference -g gene_list -b BAM_file -v goldStandard_variants -c csv_file -o output_directory 
+Usage: ./${0##*/} [-h] -r hg19_reference -g gene_list -b BAM_file -v goldStandard_variants -o output_directory -c
 
 Input Arguments:
     -h            Display this help and exit
