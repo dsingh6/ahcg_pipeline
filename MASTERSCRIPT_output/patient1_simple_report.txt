@@ -1,0 +1,42 @@
+12/05/2016 03:22:57 AM category: Pathogenic
+12/05/2016 03:22:57 AM |rs59026483     |LMNA:4000      |Pathogenic|
+12/05/2016 03:22:57 AM total: 1
+
+12/05/2016 03:22:57 AM category: Benign
+12/05/2016 03:22:57 AM |rs4641         |LMNA:4000      |Benign|
+12/05/2016 03:22:57 AM |rs7430407      |SCN5A:6331     |Benign|
+12/05/2016 03:22:57 AM |rs9835588      |SCN5A:6331     |Benign|
+12/05/2016 03:22:57 AM |rs41312949     |SCN5A:6331     |Benign|
+12/05/2016 03:22:57 AM |rs6599230      |SCN5A:6331     |Benign|
+12/05/2016 03:22:57 AM |rs3729948      |MYBPC3:4607    |Benign|
+12/05/2016 03:22:57 AM |rs8004990      |MYH6:4624      |Benign|
+12/05/2016 03:22:57 AM |rs382872       |MYH6:4624      |Benign|
+12/05/2016 03:22:57 AM |rs178640       |MYH6:4624      |Benign|
+12/05/2016 03:22:57 AM |rs451794       |MYH6:4624|MIR208A:406990|Benign|
+12/05/2016 03:22:57 AM |rs535111647    |MYH6:4624|MIR208A:406990|Benign|
+12/05/2016 03:22:57 AM |rs730880363    |MYH6:4624|MIR208A:406990|Benign/Untested|
+12/05/2016 03:22:57 AM |rs193922652    |MYH6:4624|MIR208A:406990|Benign/Likely benign|
+12/05/2016 03:22:57 AM |rs750532463    |MYH6:4624|MIR208A:406990|Likely benign|
+12/05/2016 03:22:57 AM |rs796853250    |MYH6:4624|MIR208A:406990|Benign|
+12/05/2016 03:22:57 AM |rs555976716    |MYH6:4624|MIR208A:406990|Benign|
+12/05/2016 03:22:57 AM |rs365990       |MYH6:4624      |Benign|
+12/05/2016 03:22:57 AM |rs452036       |MYH6:4624      |Benign|
+12/05/2016 03:22:57 AM |rs434273       |MYH6:4624      |Benign|
+12/05/2016 03:22:57 AM |rs2277474      |MYH6:4624      |Benign|
+12/05/2016 03:22:57 AM |rs564923630    |MYH7:4625      |Benign/Likely benign|
+12/05/2016 03:22:57 AM |rs45504498     |MYH7:4625      |Benign/Likely benign|
+12/05/2016 03:22:57 AM |rs7157716      |MYH7:4625      |Benign|
+12/05/2016 03:22:57 AM |rs735711       |MYH7:4625      |Benign|
+12/05/2016 03:22:57 AM total: 24
+
+12/05/2016 03:22:57 AM category: Conflicting interpretations
+12/05/2016 03:22:57 AM |rs397516766    |MYH6:4624|MIR208A:406990|Conflicting interpretations of pathogenicity/Uncertain significance|
+12/05/2016 03:22:57 AM |rs727503235    |MYH6:4624|MIR208A:406990|Conflicting interpretations of pathogenicity/Uncertain significance|
+12/05/2016 03:22:57 AM total: 2
+
+12/05/2016 03:22:57 AM category: Non-pathogenic, non-benign, and non-conflicting
+12/05/2016 03:22:57 AM |rs794728905    |SCN5A:6331     |Uncertain significance|
+12/05/2016 03:22:57 AM |rs397516764    |MYH6:4624|MIR208A:406990|Uncertain significance|
+12/05/2016 03:22:57 AM |rs796313537    |MYH6:4624|MIR208A:406990|Uncertain significance|
+12/05/2016 03:22:57 AM |rs796876119    |MYH6:4624|MIR208A:406990|Uncertain significance|
+12/05/2016 03:22:57 AM total: 4
