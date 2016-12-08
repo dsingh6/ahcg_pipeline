@@ -338,5 +338,5 @@ wget http://vannberg.biology.gatech.edu/data/DCM/MenPa004DNA/Patient4_RG_MD_IR_B
 
 - Run master script to generate variants and get coverage info
 ```{sh}
-./master_variantAnalysis.sh [-h] -r hg19_reference -g gene_list -b BAM_file -v goldStandard_variants(not mandatory) -o output_directory
+./master_variantAnalysis.sh [-h] -r hg19_reference -g gene_list -b BAM_file -v clinvar.vcf -o output_directory -c
 ``` 
