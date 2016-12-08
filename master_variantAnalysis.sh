@@ -4,14 +4,14 @@ show_help()
 {
 cat <<EOF
 
-Usage: ./${0##*/} [-h] -r hg19_reference -g gene_list -b BAM_file -v goldStandard_variants -o output_directory -c
+Usage: ./${0##*/} [-h] -r hg19_reference -g gene_list -b BAM_file -v clinvar.vcf -o output_directory -c
 
 Input Arguments:
     -h            Display this help and exit
     -r 		  hg19 reference file - MANDATORY
     -g            List of clinically relevant genes and NM numbers - MANDATORY
     -b		  Merged BAM file - MANDATORY
-    -v	          Gold standard variants vcf file
+    -v	          clinical variant file
     -o		  output directory - MANDATORY
     -c		  Use flag to remove all intermediate files
 
@@ -19,7 +19,6 @@ EOF
 }
 
 #Variables
-no_Gold_variants=0
 clean=0
 
 #Getopts
@@ -42,8 +41,7 @@ do
 		;;
 	
 	v)
-		Gvariants=$OPTARG
-		no_Gold_variants=1
+		ClinicalVariants=$OPTARG
 		;;
 	o)
 		output_dir=$OPTARG
@@ -103,29 +101,40 @@ grep -f nmNumbers.txt $hg19_ref > hg19_extracts.txt
 echo "Creating BED file for genes of interest"
 ./BEDmaker.py -i hg19_extracts.txt -o genes.bed
 
-echo "Extracting selected variants from all variants using BED file"
-bedtools intersect -header -wa -a ./recal_variants.vcf -b genes.bed > foundVariants.vcf
-
-if [ "$no_Gold_variants" == 1 ]
-then
-	echo "Comparing found variants to gold standard variants"
-	bedtools intersect -header -wa -a $Gvariants -b genes.bed > goldVariants.vcf
-	bedtools intersect -header -a foundVariants.vcf -b goldVariants.vcf > final_variants.vcf
-	rm foundVariants.vcf
-else
-	mv foundVariants.vcf final_variants.vcf
-fi
-
 echo "Getting variant coverage"
 samtools view -L genes.bed $bam -b > new.bam
 bedtools genomecov -ibam new.bam -bga > coverage_output.bed
 bedtools intersect -loj -split -a genes.bed -b coverage_output.bed >  cov.bed
 awk '{printf("%s\t%s\t\%s\t%s\t%s\n", $1,$2,$3,$4,$10,$6)}' cov.bed > final_cov.bed
+genes=( "LMNA" "MYBPC3" "MYH6" "MYH7" "SCNSA" "TNNT2" )
+for gene in "${genes[@]}"
+        do
+                grep $gene final_cov.bed > ${gene}_raw.txt
+                python cov.py ${gene}_raw.txt ${gene}.txt
+                Rscript draw_depth.R ${gene}.txt ${gene}.png
+        done
 
-mv final_variants.vcf $output_dir
+echo "Extracting selected variants from all variants using BED file"
+bedtools intersect -header -a ./recal_variants.vcf -b genes.bed > foundVariants.vcf
+bedtools intersect -a clinvar.vcf -b genes.bed -header > clinvar_allfrombed.vcf
+bedtools intersect -b foundVariants.vcf -a clinvar_allfrombed.vcf -header > found_intersect_clinvar.vcf
+python3 parse_clnsig.py -i found_intersect_clinvar.vcf 2>&1 | tee patient1_simple_report.txt
+cut -c 24- patient1_simple_report.txt
+
+#Create report as PDF
+convert patient1_simple_report.txt *.png report.pdf
+
+#Make output directory
+mkdir $output_dir
+
+#Move final outputs into output directory
+mv found_intersect_clinvar.vcf $output_dir
 mv final_cov.bed $output_dir
+mv patient1_simple_report.txt $output_dir
+mv report.pdf $output_dir
 
 # move intermediate files into intermediate directory
+mv foundVariants.vcf ./output_temp/
 mv cov.bed ./output_temp/
 mv coverage_output.bed ./output_temp/
 mv new.bam ./output_temp/
@@ -137,6 +146,15 @@ mv hg19_extracts.txt ./output_temp/
 mv recal_variants.vcf ./output_temp/
 mv output.tranches ./output_temp/
 mv output.recal* ./output_temp/
+mv new_cov_depth.txt ./output_temp/
+mv LMNA* ./output_temp/
+mv MYBPC3* ./output_temp/
+mv MYH6* ./output_temp/
+mv MYH7* ./output_temp/
+mv SCNSA* ./output_temp/
+mv TNNT2* ./output_temp/
+
+
 
 if [ "$clean" == 1 ]
 then
